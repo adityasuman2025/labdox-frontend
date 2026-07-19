@@ -1,1 +1,26 @@
-:root {}
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: light;
+}
+
+:root {
+    --color-primary: #7c3aed;
+    --color-primary-content: #ffffff;
+
+    --color-secondary: #c084fc;
+    --color-secondary-content: #ffffff;
+
+    --color-neutral: #3b0764;
+    --color-neutral-content: #f5f3ff;
+
+    --color-base-100: #faf9ff;
+    --color-base-200: #f5f3ff;
+    --color-base-300: #ede9fe;
+    --color-base-content: #2e1065;
+
+    --color-error: #ef4444;
+    --color-error-content: #ffffff;
+
+    --border-radius-btn: 0.5rem;
+}
