@@ -10,7 +10,7 @@ import Loader from "../common/Loader";
 import TextLink from "../common/TextLink";
 import { apiCall } from "../../utils/api";
 import { setCookie, setLocal } from "../../utils/storage";
-import { API_METHODS, GENERAL_ERROR, ROUTE_LOGIN, ROUTE_SIGNUP, API_ROUTE_USER_LOGIN, USER_DATA_KEY } from "../../constants";
+import { API_METHODS, GENERAL_ERROR, ROUTE_LOGIN, ROUTE_SIGNUP, USER_DATA_KEY } from "../../constants";
 
 interface AuthFormProps {
     title: string;
@@ -19,25 +19,23 @@ interface AuthFormProps {
     tokenCookieKey?: string;
     redirectPath: string;
     isSignup?: boolean;
+    isAdmin?: boolean;
 }
-export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenCookieKey, redirectPath, isSignup = false }: AuthFormProps) {
+export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenCookieKey, redirectPath, isSignup = false, isAdmin = false }: AuthFormProps) {
     const navigate = useNavigate();
     const [errors, setErrors] = useState<Record<string, string>>({ email: "", password: "", confirmPassword: "", api: "" });
 
     const handleAuthSuccess = useCallback((data?: Record<string, string>) => {
         if (data?.token && tokenCookieKey) {
             setCookie(tokenCookieKey, data?.token, 7);
-            setLocal(USER_DATA_KEY, data)
+            if (!isAdmin) setLocal(USER_DATA_KEY, data);
             navigate(redirectPath, { replace: true });
         } else setErrors(prev => ({ ...prev, api: GENERAL_ERROR }));
-    }, [tokenCookieKey, redirectPath, navigate]);
+    }, [tokenCookieKey, redirectPath, navigate, isAdmin]);
 
     const authMutation = useMutation({
         mutationFn: (body: Record<string, any>) => apiCall(apiEndpoint, API_METHODS.POST, body),
-        onSuccess: function ({ data }) {
-            if (isSignup) navigate(ROUTE_LOGIN, { replace: true });
-            else handleAuthSuccess(data);
-        },
+        onSuccess: ({ data }) => handleAuthSuccess(data),
         onError: (e) => setErrors(prev => ({ ...prev, api: e.message }))
     });
 
@@ -106,7 +104,7 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
 
                 {isSignup ? (
                     <TextLink text="Already have an account?" linkText="Log In" to={ROUTE_LOGIN} />
-                ) : apiEndpoint === API_ROUTE_USER_LOGIN ? (
+                ) : !isAdmin ? (
                     <TextLink text="Don't have an account?" linkText="Sign Up" to={ROUTE_SIGNUP} />
                 ) : null}
 

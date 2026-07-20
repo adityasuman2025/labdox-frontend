@@ -5,7 +5,8 @@ import { ADMIN_AUTH_TOKEN_KEY, API_METHODS, AUTH_TOKEN_KEY, USER_DATA_KEY, GENER
 type apiMethodstype = typeof API_METHODS;
 
 export async function apiCall(url: string, method: keyof apiMethodstype = API_METHODS.GET, body: Record<string, any> = {}) {
-    const token = getCookie(AUTH_TOKEN_KEY) || getCookie(ADMIN_AUTH_TOKEN_KEY);
+    const isAdminRoute = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
+    const token = isAdminRoute ? getCookie(ADMIN_AUTH_TOKEN_KEY) : getCookie(AUTH_TOKEN_KEY);
 
     const resp = await fetch(url, {
         method,

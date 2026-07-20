@@ -9,6 +9,7 @@ export default function Admin() {
             googleApiEndpoint={API_ROUTE_ADMIN_GOOGLE}
             tokenCookieKey={ADMIN_AUTH_TOKEN_KEY}
             redirectPath={ROUTE_ADMIN_WAITLIST}
+            isAdmin={true}
         />
     );
 }

@@ -31,9 +31,9 @@ export default function Routes() {
                         <MyRoutes>
                             <Route path={ROUTE_LOGIN} element={<NotUserAuth><Login /></NotUserAuth>} />
                             <Route path={ROUTE_SIGNUP} element={<NotUserAuth><Signup /></NotUserAuth>} />
-                            <Route path={ROUTE_ADMIN} element={<NotAdminAuth><Admin /></NotAdminAuth>} />
-
                             <Route path={ROUTE_USER_WAITLIST} element={<UserAuth><UserWaitlist /></UserAuth>} />
+
+                            <Route path={ROUTE_ADMIN} element={<NotAdminAuth><Admin /></NotAdminAuth>} />
                             <Route path={ROUTE_ADMIN_WAITLIST} element={<AdminAuth><AdminWaitlist /></AdminAuth>} />
                             <Route path="*" element={<Navigate to={ROUTE_LOGIN} replace />} />
                         </MyRoutes>
