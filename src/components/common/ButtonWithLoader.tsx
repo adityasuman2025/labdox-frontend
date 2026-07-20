@@ -1,11 +1,13 @@
-import { memo, type ReactNode } from "react";
+import { memo, type ReactNode, type SyntheticEvent } from "react";
+import Error from "./Error";
 
 interface ButtonWithLoaderProps {
-    isLoading?: boolean,
-    content?: ReactNode | string,
-    className?: string,
-    disabled?: boolean,
-    error?: string,
+    isLoading?: boolean;
+    content?: ReactNode | string;
+    className?: string;
+    disabled?: boolean;
+    error?: string;
+    onClick?: (e: SyntheticEvent<HTMLButtonElement>) => void;
 }
 function ButtonWithLoader({
     isLoading = false,
@@ -13,19 +15,16 @@ function ButtonWithLoader({
     className = "",
     disabled,
     error = "",
+    onClick,
 }: ButtonWithLoaderProps) {
     return (
         <div className="w-full">
-            <button className={`btn ${className}`} disabled={isLoading || disabled}>
+            <button className={`btn ${className}`} disabled={isLoading || disabled} onClick={onClick}>
                 {isLoading && <span className="loading loading-spinner loading-sm"></span>}
                 {content}
             </button>
 
-            {error && (
-                <span className="text-xs text-error mt-1 block pl-1">
-                    {error}
-                </span>
-            )}
+            <Error message={error} className="text-center" />
         </div>
     );
 }

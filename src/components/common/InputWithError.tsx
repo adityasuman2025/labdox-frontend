@@ -1,11 +1,13 @@
 import { memo } from "react";
+import Error from "./Error";
 
 interface InputWithErrorProps {
-    type: string,
-    placeholder: string,
-    name: string,
-    error?: string,
-    className?: string,
+    type: string;
+    placeholder: string;
+    name: string;
+    error?: string;
+    className?: string;
+    disabled?: boolean;
 }
 function InputWithError({
     type = "text",
@@ -13,6 +15,7 @@ function InputWithError({
     name,
     error,
     className = "",
+    disabled = false,
 }: InputWithErrorProps) {
     return (
         <div className="w-full">
@@ -20,13 +23,11 @@ function InputWithError({
                 type={type}
                 name={name}
                 placeholder={placeholder}
+                disabled={disabled}
                 className={`input w-full ${error ? "input-error" : ""} ${className}`}
             />
-            {error && (
-                <span className="text-xs text-error mt-1 block pl-1">
-                    {error}
-                </span>
-            )}
+
+            <Error message={error} />
         </div>
     );
 }
