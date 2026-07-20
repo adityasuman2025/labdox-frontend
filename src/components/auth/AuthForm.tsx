@@ -19,7 +19,7 @@ interface AuthFormProps {
 }
 export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenCookieKey, redirectPath, isSignup = false }: AuthFormProps) {
     const navigate = useNavigate();
-    const [errors, setErrors] = useState({ email: "", password: "", confirmPassword: "", api: "" });
+    const [errors, setErrors] = useState<Record<string, string>>({ email: "", password: "", confirmPassword: "", api: "" });
 
     const authMutation = useMutation({
         mutationFn: (body: Record<string, any>) => apiCall(apiEndpoint, API_METHODS.POST, body),
