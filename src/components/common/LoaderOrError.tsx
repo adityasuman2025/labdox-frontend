@@ -4,7 +4,7 @@ import Error from "./Error";
 
 interface LoaderOrErrorProps {
     isLoading: boolean;
-    error: string;
+    error?: string;
     isEmpty: boolean;
     emptyTitle?: string;
     children: ReactNode;

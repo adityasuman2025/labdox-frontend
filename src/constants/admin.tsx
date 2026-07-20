@@ -11,32 +11,32 @@ export const getStatusBadge = (status: string) => {
 export const COLUMNS: Record<string, any>[] = [
     {
         title: "Name",
-        body: (item) => <span>{item.fullName}</span>,
+        body: (item: Record<string, any>) => <span>{item.fullName}</span>,
     },
     {
         title: "Email",
-        body: (item) => <span>{item.userId?.email || "-"}</span>,
+        body: (item: Record<string, any>) => <span>{item.userId?.email || "-"}</span>,
     },
     {
         title: "Phone",
-        body: (item) => <span>{item.phoneNumber || "-"}</span>,
+        body: (item: Record<string, any>) => <span>{item.phoneNumber || "-"}</span>,
     },
     {
         title: "Email Validation",
-        body: (item) => getStatusBadge(item.emailValidationStatus),
+        body: (item: Record<string, any>) => getStatusBadge(item.emailValidationStatus),
     },
     {
         title: "Phone Validation",
-        body: (item) => getStatusBadge(item.phoneValidationStatus),
+        body: (item: Record<string, any>) => getStatusBadge(item.phoneValidationStatus),
     },
     {
         title: "Interest Reason",
         className: "max-w-xs truncate text-sm",
-        body: (item) => <span title={item.interestReason}>{item.interestReason}</span>,
+        body: (item: Record<string, any>) => <span title={item.interestReason}>{item.interestReason}</span>,
     },
     {
         title: "Use Case",
         className: "max-w-xs truncate text-sm",
-        body: (item) => <span title={item.useCase}>{item.useCase}</span>,
+        body: (item: Record<string, any>) => <span title={item.useCase}>{item.useCase}</span>,
     },
 ];

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Layout from "../components/common/Layout";
 import Table from "../components/common/Table";
@@ -10,7 +9,7 @@ import { COLUMNS } from "../constants/admin";
 const SIZE = 10;
 
 export default function AdminWaitlist() {
-    const [page, setPage] = useState<number>(1);
+    const page = 1;
 
     const { data, isLoading, error } = useQuery<Record<string, any>>({
         queryKey: ["waitlist", page],
