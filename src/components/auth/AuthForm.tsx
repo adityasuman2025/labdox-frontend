@@ -9,8 +9,8 @@ import Error from "../common/Error";
 import Loader from "../common/Loader";
 import TextLink from "../common/TextLink";
 import { apiCall } from "../../utils/api";
-import { setCookie } from "../../utils/cookie";
-import { API_METHODS, GENERAL_ERROR, ROUTE_LOGIN, ROUTE_SIGNUP, API_ROUTE_USER_LOGIN } from "../../constants";
+import { setCookie, setLocal } from "../../utils/storage";
+import { API_METHODS, GENERAL_ERROR, ROUTE_LOGIN, ROUTE_SIGNUP, API_ROUTE_USER_LOGIN, USER_DATA_KEY } from "../../constants";
 
 interface AuthFormProps {
     title: string;
@@ -24,9 +24,10 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
     const navigate = useNavigate();
     const [errors, setErrors] = useState<Record<string, string>>({ email: "", password: "", confirmPassword: "", api: "" });
 
-    const handleAuthSuccess = useCallback((token?: string) => {
-        if (token && tokenCookieKey) {
-            setCookie(tokenCookieKey, token, 7);
+    const handleAuthSuccess = useCallback((data?: Record<string, string>) => {
+        if (data?.token && tokenCookieKey) {
+            setCookie(tokenCookieKey, data?.token, 7);
+            setLocal(USER_DATA_KEY, data)
             navigate(redirectPath, { replace: true });
         } else setErrors(prev => ({ ...prev, api: GENERAL_ERROR }));
     }, [tokenCookieKey, redirectPath, navigate]);
@@ -35,14 +36,14 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
         mutationFn: (body: Record<string, any>) => apiCall(apiEndpoint, API_METHODS.POST, body),
         onSuccess: function ({ data }) {
             if (isSignup) navigate(ROUTE_LOGIN, { replace: true });
-            else handleAuthSuccess(data?.token);
+            else handleAuthSuccess(data);
         },
         onError: (e) => setErrors(prev => ({ ...prev, api: e.message }))
     });
 
     const googleAuthMutation = useMutation({
         mutationFn: (body: { idToken: string }) => apiCall(googleApiEndpoint || "", API_METHODS.POST, body),
-        onSuccess: ({ data }) => handleAuthSuccess(data?.token),
+        onSuccess: ({ data }) => handleAuthSuccess(data),
         onError: (e) => setErrors(prev => ({ ...prev, api: e.message }))
     });
 
@@ -51,7 +52,7 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
     const handleSubmit = useCallback((e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (isPending) return;
-        setErrors({ email: "", password: "", confirmPassword: "", api: "" });
+        setErrors({});
 
         const formData = new FormData(e.currentTarget);
         const email = (formData.get("email") as string || "").trim();
@@ -75,8 +76,7 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
     }, [authMutation, isPending]);
 
     const handleChange = useCallback((e: SyntheticEvent<HTMLFormElement>) => {
-        const target = e.target as HTMLInputElement;
-        const name = target.name;
+        const name = (e.target as HTMLInputElement).name;
         setErrors(prev => prev[name] ? { ...prev, [name]: "" } : prev);
     }, []);
 
@@ -91,9 +91,9 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
     }, []);
 
     return (
-        <main className="h-screen flex flex-col items-center justify-center">
+        <main className="min-h-screen flex flex-col items-center justify-center">
             <form className="w-xs md:w-md flex flex-col gap-4 items-center justify-center" onSubmit={handleSubmit} onChange={handleChange}>
-                <h1 className="text-3xl font-bold text-neutral">{title}</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-neutral">{title}</h1>
 
                 <InputWithError type="text" name="email" placeholder="email" error={errors.email} disabled={isPending} />
                 <InputWithError type="password" name="password" placeholder="password" error={errors.password} disabled={isPending} />
@@ -102,7 +102,7 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
                     <InputWithError type="password" name="confirmPassword" placeholder="confirm password" error={errors.confirmPassword} disabled={isPending} />
                 )}
 
-                <ButtonWithLoader content={isSignup ? "Sign Up" : "Login"} className="btn-primary w-full" isLoading={authMutation.isPending} disabled={isPending} />
+                <ButtonWithLoader content={isSignup ? "Sign Up" : "Login"} className="btn-primary" isLoading={authMutation.isPending} disabled={isPending} />
 
                 {isSignup ? (
                     <TextLink text="Already have an account?" linkText="Log In" to={ROUTE_LOGIN} />

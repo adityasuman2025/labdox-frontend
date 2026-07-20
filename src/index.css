@@ -22,5 +22,8 @@
     --color-error: #ef4444;
     --color-error-content: #ffffff;
 
+    --color-success: #10b981;
+    --color-success-content: #ffffff;
+
     --border-radius-btn: 0.5rem;
 }

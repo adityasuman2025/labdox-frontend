@@ -8,6 +8,8 @@ interface InputWithErrorProps {
     error?: string;
     className?: string;
     disabled?: boolean;
+    defaultValue?: string;
+    maxLength?: number;
 }
 function InputWithError({
     type = "text",
@@ -16,16 +18,31 @@ function InputWithError({
     error,
     className = "",
     disabled = false,
+    defaultValue,
+    maxLength,
 }: InputWithErrorProps) {
     return (
         <div className="w-full">
-            <input
-                type={type}
-                name={name}
-                placeholder={placeholder}
-                disabled={disabled}
-                className={`input w-full ${error ? "input-error" : ""} ${className}`}
-            />
+            {type === "textarea" ? (
+                <textarea
+                    name={name}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    defaultValue={defaultValue}
+                    className={`textarea w-full ${error ? "textarea-error" : ""} ${className}`}
+                    maxLength={maxLength}
+                />
+            ) : (
+                <input
+                    type={type}
+                    name={name}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                    defaultValue={defaultValue}
+                    className={`input w-full ${error ? "input-error" : ""} ${className}`}
+                    maxLength={maxLength}
+                />
+            )}
 
             <Error message={error} />
         </div>

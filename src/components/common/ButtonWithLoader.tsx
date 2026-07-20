@@ -3,7 +3,7 @@ import Error from "./Error";
 
 interface ButtonWithLoaderProps {
     isLoading?: boolean;
-    content?: ReactNode | string;
+    content: ReactNode | string;
     className?: string;
     disabled?: boolean;
     error?: string;
@@ -19,7 +19,7 @@ function ButtonWithLoader({
 }: ButtonWithLoaderProps) {
     return (
         <div className="w-full">
-            <button className={`btn ${className}`} disabled={isLoading || disabled} onClick={onClick}>
+            <button className={`btn w-full ${className}`} disabled={isLoading || disabled} onClick={onClick}>
                 {isLoading && <span className="loading loading-spinner loading-sm"></span>}
                 {content}
             </button>

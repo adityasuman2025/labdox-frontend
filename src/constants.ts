@@ -3,6 +3,7 @@ export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export const AUTH_TOKEN_KEY = "token";
 export const ADMIN_AUTH_TOKEN_KEY = "admin-token";
+export const USER_DATA_KEY = "user-data";
 
 export const ROUTE_LOGIN = "/";
 export const ROUTE_SIGNUP = "/signup";

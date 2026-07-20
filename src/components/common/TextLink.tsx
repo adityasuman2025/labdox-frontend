@@ -2,19 +2,26 @@ import { memo } from "react";
 import { useNavigate } from "react-router";
 
 interface TextLinkProps {
-    text: string;
+    text?: string;
     linkText: string;
-    to: string;
+    linkClassName?: string;
+    to?: string;
+    onClick?: () => void;
 }
-function TextLink({ text, linkText, to }: TextLinkProps) {
+function TextLink({ text, linkText, linkClassName = "text-primary font-semibold", to, onClick }: TextLinkProps) {
     const navigate = useNavigate();
+
+    const handleClick = () => {
+        if (onClick) onClick();
+        else if (to) navigate(to);
+    };
 
     return (
         <p className="text-sm text-base-content/70">
-            {text}
+            {text && `${text} `}
             <span
-                onClick={() => navigate(to)}
-                className="text-primary hover:underline cursor-pointer font-semibold ml-1.5"
+                onClick={handleClick}
+                className={`hover:underline cursor-pointer ml-1.5 ${linkClassName}`}
             >
                 {linkText}
             </span>
