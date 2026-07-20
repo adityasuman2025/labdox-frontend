@@ -9,6 +9,16 @@ export function keepOnlyNumber(str: string) {
     return out;
 }
 
+export function debounce(func: Function, delay: number) {
+    let timer: ReturnType<typeof setTimeout>;
+    return function (...args: any[]) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func(...args);
+        }, delay);
+    };
+}
+
 export * from "./api";
 export * from "./storage";
 export * from "./navigation";

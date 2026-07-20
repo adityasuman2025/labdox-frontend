@@ -18,7 +18,7 @@ function ButtonWithLoader({
     onClick,
 }: ButtonWithLoaderProps) {
     return (
-        <div className="w-full">
+        <div className={`w-full ${className}`}>
             <button className={`btn w-full ${className}`} disabled={isLoading || disabled} onClick={onClick}>
                 {isLoading && <span className="loading loading-spinner loading-sm"></span>}
                 {content}
