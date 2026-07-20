@@ -1,12 +1,13 @@
 import { clearCookie, clearLocal, getCookie } from "./storage";
 import { globalNavigate } from "./navigation";
-import { ADMIN_AUTH_TOKEN_KEY, API_METHODS, AUTH_TOKEN_KEY, USER_DATA_KEY, GENERAL_ERROR, ROUTE_LOGIN } from "../constants";
+import { ADMIN_AUTH_TOKEN_KEY, API_METHODS, AUTH_TOKEN_KEY, USER_DATA_KEY, GENERAL_ERROR, ROUTE_LOGIN, ROUTE_ADMIN } from "../constants";
 
 type apiMethodstype = typeof API_METHODS;
 
+const isAdminRoute = () => typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
+
 export async function apiCall(url: string, method: keyof apiMethodstype = API_METHODS.GET, body: Record<string, any> = {}) {
-    const isAdminRoute = typeof window !== "undefined" && window.location.pathname.startsWith("/admin");
-    const token = isAdminRoute ? getCookie(ADMIN_AUTH_TOKEN_KEY) : getCookie(AUTH_TOKEN_KEY);
+    const token = isAdminRoute() ? getCookie(ADMIN_AUTH_TOKEN_KEY) : getCookie(AUTH_TOKEN_KEY);
 
     const resp = await fetch(url, {
         method,
@@ -31,8 +32,12 @@ export async function apiCall(url: string, method: keyof apiMethodstype = API_ME
 }
 
 export function logout() {
-    clearCookie(AUTH_TOKEN_KEY);
-    clearCookie(ADMIN_AUTH_TOKEN_KEY);
-    clearLocal(USER_DATA_KEY)
-    globalNavigate(ROUTE_LOGIN);
+    if (isAdminRoute()) {
+        clearCookie(ADMIN_AUTH_TOKEN_KEY);
+        globalNavigate(ROUTE_ADMIN);
+    } else {
+        clearCookie(AUTH_TOKEN_KEY);
+        clearLocal(USER_DATA_KEY);
+        globalNavigate(ROUTE_LOGIN);
+    }
 }
