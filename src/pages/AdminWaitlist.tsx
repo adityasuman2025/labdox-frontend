@@ -12,6 +12,7 @@ import { usePagination } from "../hooks/usePagination";
 
 const SIZE = 20;
 
+
 export default function AdminWaitlist() {
     const [searchQry, setSearchQry] = useState<string>("");
     const [page, setPage] = useState<number>(1);
