@@ -1,5 +1,4 @@
 import React from "react";
-import Cookies from "js-cookie";
 import { Navigate } from "react-router";
 import { getCookie } from "../utils/storage";
 import { AUTH_TOKEN_KEY, ADMIN_AUTH_TOKEN_KEY, ROUTE_LOGIN, ROUTE_ADMIN, ROUTE_USER_WAITLIST, ROUTE_ADMIN_WAITLIST } from "../constants";
