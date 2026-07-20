@@ -59,7 +59,7 @@ export default function AuthForm({ title, apiEndpoint, googleApiEndpoint, tokenC
 
         const newErrors = {
             email: !email ? "email is required" : (!validator.isEmail(email) ? "not a valid email" : ""),
-            password: !password ? "password is required" : "",
+            password: !password ? "password is required" : (password.length < 4 ? "password must be greater than 4 characters" : ""),
             confirmPassword: ""
         };
 
